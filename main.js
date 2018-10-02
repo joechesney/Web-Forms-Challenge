@@ -1,31 +1,51 @@
+//////////////////////////////////////
+////// DYNAMIC DATE BLOG LINK ////////
+//////////////////////////////////////
 
-// *** SUGGESTED READING LINK ***
-// This uses the MomentJs library (node module) to generate and format dynamic date
+// *** SUGGESTED READING BLOG LINK ***
+// This uses the MomentJs library (node module) to generate and format a dynamic date
 $("span#current-date").append(`${moment().format('dddd[, ] MMMM Do')}`);
 
 
-// *** MONTH DROPDOWN MENU ***
-// populates month menu options by looping over the array of month names
-// in string format from the MomentJS library method 'months()'
-$.each(moment.months(), function(index, value){
-  $("#month-dropdown").append($("<option />").val(index).text(value));
-});
+///////////////////////////////////////
+////// POPULATING DROPDOWN MENUS //////
+///////////////////////////////////////
 
-// *** YEAR DROPDOWN MENU ***
-// populates year menu options from 1900 to current year
+// *** YEAR DROPDOWN MENU *** //
+// Populates 'Year' dropdown menu options by getting the current year
+//   then decrementing until the year 1900
 for(let i = moment().get('year'); i >= 1900; i--){
   $("#year-dropdown").append($("<option />").val(i).text(i));
 }
 
-// *** DATE DROPDOWN MENU ***
-// Populates the 'days' dropdown menu based on the values of the 'month' and 'year' dropdown menus
+// *** MONTH DROPDOWN MENU *** //
+// Populates 'Month' dropdown menu by looping over the array of month names
+//   in string format from the MomentJS library method 'months()'
+// I chose to display the proper string name of each month, instead
+//   of the number of each month because I think it is easier
+//   for users to understand. If I had used the month number value,
+//   I would assign with .text(index + 1) because moment.months()
+//   array is zero-indexed
+$.each(moment.months(), function(index, value){
+  $("#month-dropdown").append($("<option />").val(index).text(value));
+});
+
+
+
+// *** DATE DROPDOWN MENU *** //
+// Populates 'Date' dropdown menu based on the values of the
+//   'Month' and 'Year' dropdown menus
 // THREE STEPS:
-// STEP 1. Checks that both 'month' and 'year' actually have values
-// STEP 2. If they both do, it will determine how many days are in the selected month
-// STEP 3. Using that number, it will populate the 'days' menu
+// STEP 1. Checks that both 'Month' and 'Year' menus actually have values
+//           If they do not, nothing will happen.
+// STEP 2. If they both do have values, determine how many days are in
+//           the selected month
+// STEP 3. Using the number from STEP 2, it will populate the 'Date' menu
 
 // STEP 1 FUNCTION
-// Checks that both the 'year' and 'month' dropdowns have a value
+// Checks that both the 'Year' and 'Month' dropdowns have a value
+// Receives: nothing
+// Returns: Boolean
 function checkForValues(){
   if($("#year-dropdown").val() && $("#month-dropdown").val())
     return true;
@@ -33,29 +53,31 @@ function checkForValues(){
 }
 
 // STEP 2 FUNCTION
-// Receives: the values of the two dropdown inputs
-// Returns: Integer: the number of days in the month
+// Receives: the values of the 'Year' and 'Month' dropdown menus
+// Returns: Integer: the number of days in the selected month
 function calulateDaysInAMonth(year, month){
   // 'month' must be converted to a number and increased by 1.
   // Using '0' as the third argument returns the PREVIOUS month's total days
   if (year && month)
     return new Date(+year, +month + 1, 0).getDate();
-  return false;
 }
 
 // STEP 3 FUNCTION
+// Populates the 'Date' dropdown menu with appropriate number of days
 // Receives: integer value of number of days in that month
-// Populates the 'date' dropdown menu with appropriate number of days
+// Returns: nothing
 function populateDateMenu(numberOfDays){
   for(let i = 1; i <= numberOfDays; i++){
     $("#date-dropdown").append($("<option />").val(i).text(i))
   }
 }
 
-// Listener for the 2 input changes assigned using a class that is applied to both select elements
-$(".birthdate-select").on("change", function(){
+// Listener for the 2 input changes assigned using a class
+//   "birthdate-selects" that is applied to both 'select' elements
+$(".birthdate-selects").on("change", function(){
   let year = $("#year-dropdown").val(),
   month = $("#month-dropdown").val();
   if(checkForValues())
     populateDateMenu(calulateDaysInAMonth(year, month));
 });
+
