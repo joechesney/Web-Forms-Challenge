@@ -134,6 +134,46 @@ function replaceFormWithMessage() {
   `);
 }
 
+/***** FUNCTION: SEND EMAIL *****/
+// -Purpose: Creates and sends email with the user's form data
+// -Receives: nothing
+// -Returns: Promise
+function sendEmail() {
+  let userBdayMonth = $("#month-dropdown").val();
+  if( userBdayMonth < 10)
+    userBdayMonth = `0${userBdayMonth}`
+
+  let userBdayDate = $("#date-dropdown").val();
+  if( userBdayDate < 10)
+    userBdayDate = `0${userBdayDate}`
+
+  let userBirthdate = moment(`${$("#year-dropdown").val()}-${userBdayMonth}-${userBdayDate} `).format('MM/DD/YYYY');
+  let newUserObjectEmail = {
+    userName: $("#user-name").val(),
+    userEmail: $("#user-email").val(),
+    userBirthdate,
+    destinationEmail: `infrastructure@medalogix.com`,
+    subject: `New registration submitted on ${moment().format('dddd[, ] MMMM Do')}`,
+    body: `${$("#favorite-restaurants-textarea").val()}`,
+    CC: $("#user-email").val(),
+  }
+  console.log('newUserObjectEmail',newUserObjectEmail);
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: `localhost:25`,
+      method: 'POST',
+      data: newUserObjectEmail,
+      success: function (data) {
+        resolve(data);
+      },
+      error: function (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  });
+}
+
 ////// FORM SUBMIT EVENT LISTENERS //////
 
 /***** EVENT LISTENER: SUBMIT FORM *****/
@@ -146,5 +186,9 @@ $("#registration-form").on("submit", function (e) {
   e.preventDefault();
   if (isUserUnderLegalAge())
     alert(`Oops, you have ${daysUntilEighteen()} days until you turn 18.`);
+  // sendEmail()
+  // .then(response=>{
+  //   replaceFormWithMessage();
+  // });
   replaceFormWithMessage();
 });
