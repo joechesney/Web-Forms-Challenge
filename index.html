@@ -41,11 +41,19 @@
       </div>
       <div>
         <label for="favorite-restaurants">Favorite Restaurants, each on a new line:</label><br>
-        <textarea rows="5" columns="25" placeholder="Applebee's &#10;The Melting Pot &#10;Hattie B's" required></textarea>
+        <textarea id="favorite-restaurants-textarea"
+          name="favorite-restaurants"
+          rows="5" columns="25"
+          placeholder="Applebee's &#10;The Melting Pot &#10;Hattie B's"
+          required>
+        </textarea>
       </div>
 
       <input type="submit" value="Submit"/>
     </form>
+  </div>
+  <div id="message-after-registration">
+
   </div>
 
   <script src="main.js" type="module"></script>

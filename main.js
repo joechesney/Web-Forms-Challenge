@@ -14,7 +14,7 @@ $("span#current-date").append(`${moment().format('dddd[, ] MMMM Do')}`);
 // *** YEAR DROPDOWN MENU *** //
 // Populates 'Year' dropdown menu options by getting the current year
 //   then decrementing until the year 1900
-for(let i = moment().get('year'); i >= 1900; i--){
+for (let i = moment().get('year'); i >= 1900; i--) {
   $("#year-dropdown").append($("<option />").val(i).text(i));
 }
 
@@ -26,7 +26,7 @@ for(let i = moment().get('year'); i >= 1900; i--){
 //   for users to understand. If I had used the month number value,
 //   I would assign with .text(index + 1) because moment.months()
 //   array is zero-indexed
-$.each(moment.months(), function(index, value){
+$.each(moment.months(), function (index, value) {
   $("#month-dropdown").append($("<option />").val(index).text(value));
 });
 
@@ -44,8 +44,8 @@ $.each(moment.months(), function(index, value){
 // Checks that both the 'Year' and 'Month' dropdowns have a value
 // Receives: nothing
 // Returns: Boolean
-function checkForValues(){
-  if($("#year-dropdown").val() && $("#month-dropdown").val())
+function checkForValues() {
+  if ($("#year-dropdown").val() && $("#month-dropdown").val())
     return true;
   return false;
 }
@@ -53,7 +53,7 @@ function checkForValues(){
 // STEP 2 FUNCTION
 // Receives: the values of the 'Year' and 'Month' dropdown menus
 // Returns: Integer: the number of days in the selected month
-function calulateDaysInAMonth(year, month){
+function calulateDaysInAMonth(year, month) {
   // 'month' must be converted to a number and increased by 1.
   // Using '0' as the third argument returns the PREVIOUS month's total days
   if (year && month)
@@ -64,8 +64,8 @@ function calulateDaysInAMonth(year, month){
 // Populates the 'Date' dropdown menu with appropriate number of days
 // Receives: integer value of number of days in that month
 // Returns: nothing
-function populateDateMenu(numberOfDays){
-  for(let i = 1; i <= numberOfDays; i++){
+function populateDateMenu(numberOfDays) {
+  for (let i = 1; i <= numberOfDays; i++) {
     $("#date-dropdown").append($("<option />").val(i).text(i));
   }
 }
@@ -74,10 +74,10 @@ function populateDateMenu(numberOfDays){
 
 // Listener for the 2 inputs is assigned using a class
 //   "birthdate-selects" that is applied to both 'select' elements
-$(".birthdate-selects").on("change", function(){
+$(".birthdate-selects").on("change", function () {
   let year = $("#year-dropdown").val(),
-  month = $("#month-dropdown").val();
-  if(checkForValues())
+    month = $("#month-dropdown").val();
+  if (checkForValues())
     populateDateMenu(calulateDaysInAMonth(year, month));
 });
 
@@ -89,7 +89,7 @@ $(".birthdate-selects").on("change", function(){
 // *** CHECK USER'S AGE *** //
 // Receives: nothing
 // Returns: Boolean
-function isUserUnderLegalAge(){
+function isUserUnderLegalAge() {
   let usersAge = new Date($("#year-dropdown").val(), $("#month-dropdown").val(), $("#date-dropdown").val());
   let eighteenYearsOld = new Date((new Date().getFullYear() - 18), $("#month-dropdown").val(), $("#date-dropdown").val());
   // Dates are in milliseconds since 1970, so a smaller
@@ -97,7 +97,7 @@ function isUserUnderLegalAge(){
   // So, if eighteenYearsOld is smaller than the usersAge,
   //   that means that the user is less than 18 years
   //   old, so the function returns true
-  if(eighteenYearsOld < usersAge)
+  if (eighteenYearsOld < usersAge)
     return true;
   return false;
 }
@@ -105,16 +105,26 @@ function isUserUnderLegalAge(){
 // *** CALCULATE DAYS UNTIL USER IS 18 *** //
 // Receives: nothing
 // Returns: Integer of how many days until the user is 18
-function daysUntilEighteen(){
+function daysUntilEighteen() {
   let usersAge = new Date($("#year-dropdown").val(), $("#month-dropdown").val(), $("#date-dropdown").val());
   let rightNow = new Date();
   let millisecondsDifference = new moment.duration(rightNow - usersAge);
   return Math.round(millisecondsDifference.asDays());
 }
 
+function replaceFormWithMessage() {
+  let restaurants = $("#favorite-restaurants-textarea").val().split('\n');
+  let couponBookValue = 5 + ((restaurants.length - 1) * 3);
+  $("#registration-form").hide();
+  $("#message-after-registration").append(`
+    Thank you for registering. We will be in touch. Please consider ordering a customized coupon book for just $${couponBookValue}.
+  `);
+}
+
 ///// FORM SUBMIT EVENT LISTENERS /////
-$("#registration-form").on("submit", function(e){
+$("#registration-form").on("submit", function (e) {
   e.preventDefault();
-  if(isUserUnderLegalAge())
+  if (isUserUnderLegalAge())
     alert(`Oops, you have ${daysUntilEighteen()} days until you turn 18.`);
-})
+  replaceFormWithMessage();
+});
