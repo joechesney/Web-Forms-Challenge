@@ -17,10 +17,10 @@
     Register:
     <form id="registration-form">
       <label for="name">Name: </label>
-      <input type="text" name="name" placeholder="Name" required/>
+      <input type="text" name="name" placeholder="Name" pattern=".{3,50}" required/>
 
       <label for="email">Email: </label>
-      <input type="email" name="email" placeholder="Email Address" required/>
+      <input type="email" name="email" placeholder="Email Address" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"  required/>
 
       <div>
         Date of Birth:<br>
@@ -38,6 +38,10 @@
         <select id="date-dropdown" required>
 
         </select>
+      </div>
+      <div>
+        <label for="favorite-restaurants">Favorite Restaurants, each on a new line:</label><br>
+        <textarea rows="5" columns="25" placeholder="Applebee's &#10;The Melting Pot &#10;Hattie B's" required></textarea>
       </div>
 
       <input type="submit" value="Submit"/>

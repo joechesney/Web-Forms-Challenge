@@ -81,3 +81,26 @@ $(".birthdate-selects").on("change", function(){
     populateDateMenu(calulateDaysInAMonth(year, month));
 });
 
+////////////////////////////////
+////// FORM SUBMISSION /////////
+////////////////////////////////
+
+function isUserUnderLegalAge(){
+  let usersAge = new Date($("#year-dropdown").val(), $("#month-dropdown").val(), $("#date-dropdown").val());
+  let rightNow = new Date();
+  let eighteenYearsOld = new Date(rightNow.getFullYear() -18, $("#month-dropdown").val(), $("#date-dropdown").val());
+  // Dates are in milliseconds since 1970, so a smaller
+  //   number means the user is actually older
+  // So, if eighteenYearsOld is smaller than the usersAge,
+  //   that means that the user is less than 18 years
+  //   old, so the function returns true
+  if(eighteenYearsOld < usersAge)
+    return true;
+  return false;
+}
+
+$("#registration-form").on("submit", function(e){
+  e.preventDefault()
+  if(isUserUnderLegalAge())
+    alert("You are under 18 years old.")
+})
