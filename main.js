@@ -157,7 +157,6 @@ function sendEmail() {
     body: `${$("#favorite-restaurants-textarea").val()}`,
     CC: $("#user-email").val(),
   }
-  console.log('newUserObjectEmail',newUserObjectEmail);
   return new Promise((resolve, reject) => {
     $.ajax({
       url: `localhost:25`,
