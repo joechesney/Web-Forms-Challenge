@@ -9,8 +9,39 @@
   <script src="node_modules/moment/min/moment.min.js"></script>
 </head>
 <body>
+  <h1>Welcome to Joe's Free Coupons!</h1>
   <div>
     <a href="https://www.reddit.com/r/programming/">Suggested reading for <span id="current-date"></span></a>
+  </div>
+  <div>
+    Register:
+    <form id="registration-form">
+      <label for="name">Name: </label>
+      <input type="text" name="name" placeholder="Name" required/>
+
+      <label for="email">Email: </label>
+      <input type="email" name="email" placeholder="Email Address" required/>
+
+      <div>
+        Date of Birth:<br>
+        <label for="year">Year:</label>
+        <select id="year-dropdown" required>
+          <option value="" disabled selected>-</option>
+        </select>
+
+        <label for="month">Month:</label>
+        <select id="month-dropdown" required>
+          <option value="" disabled selected>-</option>
+        </select>
+
+        <label for="date">Date:</label>
+        <select id="date-dropdown" required>
+
+        </select>
+      </div>
+
+      <input type="submit" value="Submit"/>
+    </form>
   </div>
 
   <script src="main.js" type="module"></script>
