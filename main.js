@@ -30,8 +30,6 @@ $.each(moment.months(), function(index, value){
   $("#month-dropdown").append($("<option />").val(index).text(value));
 });
 
-
-
 // *** DATE DROPDOWN MENU *** //
 // Populates 'Date' dropdown menu based on the values of the
 //   'Month' and 'Year' dropdown menus
@@ -68,11 +66,13 @@ function calulateDaysInAMonth(year, month){
 // Returns: nothing
 function populateDateMenu(numberOfDays){
   for(let i = 1; i <= numberOfDays; i++){
-    $("#date-dropdown").append($("<option />").val(i).text(i))
+    $("#date-dropdown").append($("<option />").val(i).text(i));
   }
 }
 
-// Listener for the 2 input changes assigned using a class
+//// DROPDOWN EVENT LISTENERS ////
+
+// Listener for the 2 inputs is assigned using a class
 //   "birthdate-selects" that is applied to both 'select' elements
 $(".birthdate-selects").on("change", function(){
   let year = $("#year-dropdown").val(),
@@ -81,14 +81,17 @@ $(".birthdate-selects").on("change", function(){
     populateDateMenu(calulateDaysInAMonth(year, month));
 });
 
+
 ////////////////////////////////
 ////// FORM SUBMISSION /////////
 ////////////////////////////////
 
+// *** CHECK USER'S AGE *** //
+// Receives: nothing
+// Returns: Boolean
 function isUserUnderLegalAge(){
   let usersAge = new Date($("#year-dropdown").val(), $("#month-dropdown").val(), $("#date-dropdown").val());
-  let rightNow = new Date();
-  let eighteenYearsOld = new Date(rightNow.getFullYear() -18, $("#month-dropdown").val(), $("#date-dropdown").val());
+  let eighteenYearsOld = new Date((new Date().getFullYear() - 18), $("#month-dropdown").val(), $("#date-dropdown").val());
   // Dates are in milliseconds since 1970, so a smaller
   //   number means the user is actually older
   // So, if eighteenYearsOld is smaller than the usersAge,
@@ -99,8 +102,19 @@ function isUserUnderLegalAge(){
   return false;
 }
 
+// *** CALCULATE DAYS UNTIL USER IS 18 *** //
+// Receives: nothing
+// Returns: Integer of how many days until the user is 18
+function daysUntilEighteen(){
+  let usersAge = new Date($("#year-dropdown").val(), $("#month-dropdown").val(), $("#date-dropdown").val());
+  let rightNow = new Date();
+  let millisecondsDifference = new moment.duration(rightNow - usersAge);
+  return Math.round(millisecondsDifference.asDays());
+}
+
+///// FORM SUBMIT EVENT LISTENERS /////
 $("#registration-form").on("submit", function(e){
-  e.preventDefault()
+  e.preventDefault();
   if(isUserUnderLegalAge())
-    alert("You are under 18 years old.")
+    alert(`Oops, you have ${daysUntilEighteen()} days until you turn 18.`);
 })
